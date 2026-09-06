@@ -1,0 +1,68 @@
+wikimedia:
+  max_imagens: 50
+  termos_pesquisa:
+    - cow udder
+    - dairy cow udder
+    - cattle udder
+    - Holstein cow udder
+    - cow milking
+    - vaca leiteira úbere
+    - úbere bovino
+  user_agent: "ProjetoMastiteAcademico/1.0 (coleta de imagens livres para estudo)"
+  timeout: 20
+  intervalo_requisicoes: 1.0
+  max_tentativas: 3
+  max_tamanho_arquivo_mb: 15
+  licencas_permitidas:
+    - cc0
+    - public domain
+    - cc-by
+    - cc-by-sa
+
+imagens:
+  largura_minima: 300
+  altura_minima: 300
+  formatos_permitidos:
+    - JPEG
+    - PNG
+  extensoes_permitidas:
+    - .jpg
+    - .jpeg
+    - .png
+  distancia_hash_perceptual: 5
+
+anotacao:
+  modelo: IDEA-Research/grounding-dino-tiny
+  prompts:
+    - cow udder
+    - udder
+    - dairy cow udder
+    - cow teats
+  confianca_minima: 0.30
+  area_minima: 0.002
+  area_maxima: 0.80
+
+split:
+  treino: 0.70
+  validacao: 0.20
+  teste: 0.10
+  semente: 42
+
+yolo:
+  modelo: yolov8n.pt
+  epocas: 30
+  imgsz: 640
+  batch: 8
+  device: cpu
+  pasta_resultados: runs/ubere
+
+caminhos:
+  downloads: dataset/downloads
+  descartadas: dataset/descartadas
+  revisao: dataset/revisao
+  pre_anotadas: dataset/pre_anotadas
+  images: dataset/images
+  labels: dataset/labels
+  metadata_csv: metadata/imagens.csv
+  log: metadata/pipeline.log
+  dataset_yaml: dataset.yaml

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+metadata/pipeline.log
+dataset/downloads/*
+dataset/descartadas/*
+dataset/revisao/*
+dataset/pre_anotadas/*
+dataset/images/train/*
+dataset/images/val/*
+dataset/images/test/*
+dataset/labels/train/*
+dataset/labels/val/*
+dataset/labels/test/*
+runs/
+*.tmp
