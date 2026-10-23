@@ -1,0 +1,753 @@
+{
+  "selecionadas": [
+    {
+      "indice": 0,
+      "arquivo": "publico_46ba415934cd.jpg",
+      "caixa_xyxy": [
+        416.0,
+        56.875,
+        1772.8,
+        1200.0625
+      ],
+      "tamanho": [
+        2048,
+        1365
+      ]
+    },
+    {
+      "indice": 1,
+      "arquivo": "publico_7d76304d73e2.jpg",
+      "caixa_xyxy": [
+        41.25,
+        0.0,
+        229.453125,
+        163.175
+      ],
+      "tamanho": [
+        275,
+        183
+      ]
+    },
+    {
+      "indice": 2,
+      "arquivo": "publico_e07b8efb1873.jpg",
+      "caixa_xyxy": [
+        68.75,
+        15.25,
+        174.453125,
+        104.4625
+      ],
+      "tamanho": [
+        275,
+        183
+      ]
+    },
+    {
+      "indice": 3,
+      "arquivo": "publico_95f1f8800b95.jpg",
+      "caixa_xyxy": [
+        79.5,
+        27.825,
+        180.8625,
+        133.825
+      ],
+      "tamanho": [
+        318,
+        159
+      ]
+    },
+    {
+      "indice": 5,
+      "arquivo": "publico_5b21ddf4d605.jpg",
+      "caixa_xyxy": [
+        179.2,
+        125.125,
+        1651.2,
+        1052.1875
+      ],
+      "tamanho": [
+        2048,
+        1365
+      ]
+    },
+    {
+      "indice": 6,
+      "arquivo": "publico_8b9ddf77f71e.jpg",
+      "caixa_xyxy": [
+        774.4,
+        85.625,
+        1734.4,
+        959.0
+      ],
+      "tamanho": [
+        2048,
+        1370
+      ]
+    },
+    {
+      "indice": 7,
+      "arquivo": "publico_612ca08cbc33.jpg",
+      "caixa_xyxy": [
+        695.953125,
+        106.05,
+        1451.559375,
+        978.0166666666667
+      ],
+      "tamanho": [
+        2121,
+        1414
+      ]
+    },
+    {
+      "indice": 8,
+      "arquivo": "publico_27643dc507fa.jpg",
+      "caixa_xyxy": [
+        104.0,
+        48.0,
+        634.0,
+        536.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 11,
+      "arquivo": "publico_6027b38b796b.jpg",
+      "caixa_xyxy": [
+        176.0,
+        53.333333333333336,
+        464.0,
+        514.6666666666666
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 13,
+      "arquivo": "publico_6bfab9204138.jpg",
+      "caixa_xyxy": [
+        170.0,
+        13.333333333333334,
+        638.0,
+        576.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 14,
+      "arquivo": "publico_18018ee5f6b5.jpg",
+      "caixa_xyxy": [
+        104.0,
+        50.666666666666664,
+        590.0,
+        538.6666666666666
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 16,
+      "arquivo": "publico_7e6f1387f41e.jpg",
+      "caixa_xyxy": [
+        160.0,
+        56.0,
+        610.0,
+        466.6666666666667
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 20,
+      "arquivo": "publico_b72149057fe2.jpg",
+      "caixa_xyxy": [
+        208.0,
+        42.666666666666664,
+        470.0,
+        464.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 21,
+      "arquivo": "publico_da7e2c50f62f.jpg",
+      "caixa_xyxy": [
+        238.0,
+        96.0,
+        520.0,
+        488.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 25,
+      "arquivo": "publico_80573fd35464.jpg",
+      "caixa_xyxy": [
+        266.0,
+        69.33333333333333,
+        498.0,
+        453.3333333333333
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 27,
+      "arquivo": "publico_017d28c4f960.jpg",
+      "caixa_xyxy": [
+        152.0,
+        58.666666666666664,
+        614.0,
+        592.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 28,
+      "arquivo": "publico_767e6b1a0258.jpg",
+      "caixa_xyxy": [
+        254.4,
+        9.416666666666666,
+        842.7,
+        459.0625
+      ],
+      "tamanho": [
+        848,
+        565
+      ]
+    },
+    {
+      "indice": 30,
+      "arquivo": "publico_01197c6f355c.jpg",
+      "caixa_xyxy": [
+        37.5,
+        0.0,
+        675.0,
+        461.34166666666664
+      ],
+      "tamanho": [
+        1000,
+        667
+      ]
+    },
+    {
+      "indice": 31,
+      "arquivo": "publico_bf170f4084a0.jpg",
+      "caixa_xyxy": [
+        48.6,
+        30.6,
+        429.3,
+        394.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 33,
+      "arquivo": "publico_f6763efe0075.jpg",
+      "caixa_xyxy": [
+        160.65,
+        34.2,
+        372.6,
+        370.8
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 34,
+      "arquivo": "publico_3f0cd5c8c9d0.jpg",
+      "caixa_xyxy": [
+        145.8,
+        90.0,
+        369.9,
+        277.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 35,
+      "arquivo": "publico_f7f705f76bd3.jpg",
+      "caixa_xyxy": [
+        118.8,
+        84.6,
+        361.8,
+        361.8
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 36,
+      "arquivo": "publico_9a87e16d1498.jpg",
+      "caixa_xyxy": [
+        68.85,
+        165.6,
+        130.95,
+        282.6
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 37,
+      "arquivo": "publico_c9536c9daf45.jpg",
+      "caixa_xyxy": [
+        147.15,
+        14.4,
+        372.6,
+        325.8
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 39,
+      "arquivo": "publico_a7512ba809f3.jpg",
+      "caixa_xyxy": [
+        122.85,
+        104.4,
+        355.05,
+        374.4
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 40,
+      "arquivo": "publico_caaf5216b008.jpg",
+      "caixa_xyxy": [
+        297.0,
+        214.2,
+        368.55,
+        286.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 41,
+      "arquivo": "publico_c5be08a7469d.jpg",
+      "caixa_xyxy": [
+        245.7,
+        127.8,
+        390.15,
+        336.6
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 43,
+      "arquivo": "publico_099e6a4c6589.jpg",
+      "caixa_xyxy": [
+        87.75,
+        30.6,
+        284.85,
+        324.0
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 44,
+      "arquivo": "publico_e358e832d49f.jpg",
+      "caixa_xyxy": [
+        94.5,
+        0.0,
+        368.55,
+        356.4
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 49,
+      "arquivo": "publico_27011a072a37.jpg",
+      "caixa_xyxy": [
+        36.0,
+        19.0,
+        289.125,
+        214.0
+      ],
+      "tamanho": [
+        360,
+        240
+      ]
+    },
+    {
+      "indice": 50,
+      "arquivo": "publico_66687cf5e129.jpg",
+      "caixa_xyxy": [
+        37.0,
+        0.0,
+        115.0,
+        136.0
+      ],
+      "tamanho": [
+        160,
+        240
+      ]
+    },
+    {
+      "indice": 52,
+      "arquivo": "publico_0471730f6cbd.jpg",
+      "caixa_xyxy": [
+        42.75,
+        0.0,
+        192.375,
+        139.0
+      ],
+      "tamanho": [
+        360,
+        240
+      ]
+    },
+    {
+      "indice": 58,
+      "arquivo": "publico_4d4d2d440def.jpg",
+      "caixa_xyxy": [
+        117.0,
+        39.0,
+        230.625,
+        132.0
+      ],
+      "tamanho": [
+        360,
+        240
+      ]
+    },
+    {
+      "indice": 59,
+      "arquivo": "publico_3131e36d403d.jpg",
+      "caixa_xyxy": [
+        105.0,
+        43.0,
+        204.75,
+        154.0
+      ],
+      "tamanho": [
+        336,
+        240
+      ]
+    },
+    {
+      "indice": 60,
+      "arquivo": "publico_fccb4c6decbd.jpg",
+      "caixa_xyxy": [
+        158.625,
+        26.0,
+        313.875,
+        155.0
+      ],
+      "tamanho": [
+        360,
+        240
+      ]
+    },
+    {
+      "indice": 64,
+      "arquivo": "publico_a51c63aad239.jpg",
+      "caixa_xyxy": [
+        93.15,
+        21.6,
+        278.1,
+        347.4
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 67,
+      "arquivo": "publico_4e030ee47c8c.jpg",
+      "caixa_xyxy": [
+        90.0,
+        21.333333333333332,
+        542.0,
+        522.6666666666666
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 72,
+      "arquivo": "publico_2e61c3dc0025.jpg",
+      "caixa_xyxy": [
+        105.3,
+        169.2,
+        253.8,
+        358.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 74,
+      "arquivo": "publico_cd2764402b58.jpg",
+      "caixa_xyxy": [
+        117.45,
+        72.0,
+        245.7,
+        207.0
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 75,
+      "arquivo": "publico_1cd1978626d3.jpg",
+      "caixa_xyxy": [
+        151.2,
+        111.6,
+        283.5,
+        268.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 78,
+      "arquivo": "publico_f46cbfa58c1e.jpg",
+      "caixa_xyxy": [
+        126.9,
+        129.6,
+        267.3,
+        318.6
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 79,
+      "arquivo": "publico_7116f53ef156.jpg",
+      "caixa_xyxy": [
+        82.35,
+        194.4,
+        140.4,
+        273.6
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 80,
+      "arquivo": "publico_0185a1cac8eb.jpg",
+      "caixa_xyxy": [
+        120.15,
+        122.4,
+        329.4,
+        300.6
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 84,
+      "arquivo": "publico_b9ea4a01a63d.jpg",
+      "caixa_xyxy": [
+        149.85,
+        46.8,
+        317.25,
+        259.2
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 86,
+      "arquivo": "publico_26a306370b6b.jpg",
+      "caixa_xyxy": [
+        132.0,
+        0.0,
+        528.0,
+        608.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 88,
+      "arquivo": "publico_4f7f92c741a4.jpg",
+      "caixa_xyxy": [
+        176.85,
+        156.6,
+        306.45,
+        298.8
+      ],
+      "tamanho": [
+        432,
+        432
+      ]
+    },
+    {
+      "indice": 90,
+      "arquivo": "publico_cfb9681bc0b3.jpg",
+      "caixa_xyxy": [
+        238.0,
+        125.33333333333333,
+        452.0,
+        456.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 92,
+      "arquivo": "publico_2f71a14c127b.jpg",
+      "caixa_xyxy": [
+        158.0,
+        0.0,
+        488.0,
+        565.3333333333334
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 93,
+      "arquivo": "publico_ed8e05a03813.jpg",
+      "caixa_xyxy": [
+        270.0,
+        112.0,
+        448.0,
+        368.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 94,
+      "arquivo": "publico_b89efe412ac5.jpg",
+      "caixa_xyxy": [
+        122.0,
+        237.33333333333334,
+        332.0,
+        538.6666666666666
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 95,
+      "arquivo": "publico_35973ff2f650.jpg",
+      "caixa_xyxy": [
+        96.0,
+        37.333333333333336,
+        264.0,
+        306.6666666666667
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 97,
+      "arquivo": "publico_9606397bb54a.jpg",
+      "caixa_xyxy": [
+        218.0,
+        88.0,
+        414.0,
+        376.0
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    },
+    {
+      "indice": 98,
+      "arquivo": "publico_154a7c36f6e1.jpg",
+      "caixa_xyxy": [
+        116.0,
+        32.0,
+        448.0,
+        546.6666666666666
+      ],
+      "tamanho": [
+        640,
+        640
+      ]
+    }
+  ],
+  "duplicatas_descartadas": [],
+  "split": {
+    "train": 37,
+    "val": 10,
+    "test": 7
+  },
+  "criterio": "Revisao visual e deduplicacao perceptual incluindo espelhos; uma unica classe ubere. Anotacoes aproximadas, sem revisao veterinaria."
+}

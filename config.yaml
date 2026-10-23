@@ -50,8 +50,16 @@ split:
 
 yolo:
   modelo: yolov8n.pt
-  epocas: 30
-  imgsz: 640
+  epocas: 80
+  imgsz: 512
+  threads: 4
+  patience: 0
+  optimizer: AdamW
+  lr0: 0.0005
+  freeze: 10
+  mosaic: 0.5
+  confianca: 0.25
+  iou: 0.45
   batch: 8
   device: cpu
   pasta_resultados: runs/ubere

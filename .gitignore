@@ -1,4 +1,5 @@
 .venv/
+.cache/
 __pycache__/
 *.py[cod]
 metadata/pipeline.log
@@ -13,4 +14,7 @@ dataset/labels/train/*
 dataset/labels/val/*
 dataset/labels/test/*
 runs/
+dataset/publico/
+dataset/uploads/
+*.pt
 *.tmp

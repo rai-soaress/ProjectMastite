@@ -1,0 +1,21 @@
+2026-10-23 14:08:41,018 [INFO] Front iniciado em http://127.0.0.1:8001
+2026-10-23 14:10:23,998 [INFO] HTTP: "GET / HTTP/1.1" 200 -
+2026-10-23 14:10:24,086 [INFO] HTTP: "GET /favicon.ico HTTP/1.1" 404 -
+2026-10-23 14:10:24,144 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:24,172 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:24,507 [INFO] Front iniciou etapa: Identificar ubere
+2026-10-23 14:10:24,507 [INFO] HTTP: "POST /api/testar HTTP/1.1" 200 -
+2026-10-23 14:10:24,580 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:24,589 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:26,602 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:26,615 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:29,367 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:29,375 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:31,591 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:31,601 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:34,096 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:34,106 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:34,319 [INFO] Front concluiu etapa Identificar ubere: 10 ubere(s) detectado(s).
+2026-10-23 14:10:36,583 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -
+2026-10-23 14:10:36,601 [INFO] HTTP: "GET /api/metadata HTTP/1.1" 200 -
+2026-10-23 14:10:37,472 [INFO] HTTP: "GET /api/status HTTP/1.1" 200 -

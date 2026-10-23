@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import inspect
 from pathlib import Path
 
 try:
@@ -26,6 +27,7 @@ def _carregar_grounding_dino(config: dict):
         model = AutoModelForZeroShotObjectDetection.from_pretrained(modelo_id)
         device = "cuda" if torch.cuda.is_available() and config["yolo"].get("device") == "cuda" else "cpu"
         model.to(device)
+        model.eval()
         return processor, model, torch, device
     except OSError as erro:
         logging.error("Erro ao carregar modelo Grounding DINO: %s", erro)
@@ -63,6 +65,8 @@ def pre_anotar_uberes(config: dict) -> dict[str, int]:
     pasta_debug.mkdir(parents=True, exist_ok=True)
 
     processor, model, torch, device = _carregar_grounding_dino(config)
+    parametros = inspect.signature(processor.post_process_grounded_object_detection).parameters
+    chave_limiar = "box_threshold" if "box_threshold" in parametros else "threshold"
     resumo = {"anotadas": 0, "revisao": 0, "erros": 0}
 
     for caminho in sorted(pasta_downloads.iterdir()):
@@ -73,13 +77,13 @@ def pre_anotar_uberes(config: dict) -> dict[str, int]:
             largura, altura = imagem.size
             melhor: tuple[float, list[float]] | None = None
             for prompt in config["anotacao"]["prompts"]:
-                inputs = processor(images=imagem, text=prompt, return_tensors="pt").to(device)
+                inputs = processor(images=imagem, text=prompt.rstrip('. ') + '.', return_tensors="pt").to(device)
                 with torch.no_grad():
                     outputs = model(**inputs)
                 resultados = processor.post_process_grounded_object_detection(
                     outputs,
                     inputs.input_ids,
-                    box_threshold=float(config["anotacao"]["confianca_minima"]),
+                    **{chave_limiar: float(config["anotacao"]["confianca_minima"])},
                     text_threshold=0.25,
                     target_sizes=[(altura, largura)],
                 )[0]

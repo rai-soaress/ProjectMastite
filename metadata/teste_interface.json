@@ -1,0 +1,109 @@
+{
+  "url": "http://127.0.0.1:8001",
+  "foto": "C:\\Users\\ray67\\IdeaProjects\\Vscode\\ProjetoMastite\\dataset\\images\\test\\publico_01197c6f355c.jpg",
+  "resultado": "10 ubere(s) detectado(s). 96% de confianca, 95% de confianca, 84% de confianca, 77% de confianca, 63% de confianca, 52% de confianca, 45% de confianca, 41% de confianca, 34% de confianca, 31% de confianca",
+  "erros_javascript": [],
+  "modelo": "C:\\Users\\ray67\\IdeaProjects\\Vscode\\ProjetoMastite\\runs\\ubere\\treino_ubere\\weights\\best.pt",
+  "deteccoes": [
+    {
+      "classe": "ubere",
+      "confianca": 0.9588,
+      "caixa_xyxy": [
+        307.2,
+        0.0,
+        674.4,
+        472.3
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.9508,
+      "caixa_xyxy": [
+        0.7,
+        0.0,
+        679.5,
+        470.6
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.8432,
+      "caixa_xyxy": [
+        240.5,
+        0.0,
+        975.4,
+        507.8
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.771,
+      "caixa_xyxy": [
+        0.0,
+        161.8,
+        244.7,
+        478.1
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.6268,
+      "caixa_xyxy": [
+        5.8,
+        0.0,
+        996.0,
+        595.7
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.5243,
+      "caixa_xyxy": [
+        324.5,
+        0.0,
+        867.2,
+        468.7
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.4476,
+      "caixa_xyxy": [
+        571.2,
+        0.0,
+        880.5,
+        468.8
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.4064,
+      "caixa_xyxy": [
+        585.3,
+        1.4,
+        990.9,
+        465.0
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.3442,
+      "caixa_xyxy": [
+        627.6,
+        136.7,
+        858.5,
+        457.9
+      ]
+    },
+    {
+      "classe": "ubere",
+      "confianca": 0.3079,
+      "caixa_xyxy": [
+        0.0,
+        0.0,
+        240.5,
+        546.0
+      ]
+    }
+  ]
+}

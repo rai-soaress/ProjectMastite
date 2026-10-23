@@ -4,6 +4,7 @@ import csv
 import html
 import json
 import logging
+import re
 import socket
 import threading
 import traceback
@@ -16,6 +17,7 @@ from src.baixar_imagens import baixar_imagens
 from src.configuracao import carregar_config
 from src.preparar_yolo import preparar_dataset_yolo
 from src.treinar_yolo import testar_modelo, treinar_yolo
+from src.inferencia import detectar_imagem
 from src.utils import configurar_logging, criar_pastas, resolver_caminho
 from src.validar_imagens import validar_e_remover_duplicadas
 
@@ -126,6 +128,19 @@ HTML = r"""<!doctype html>
       opacity: .55;
       cursor: wait;
     }
+    .download-link {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      padding: 12px;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .download-link:hover { background: var(--accent-dark); }
+    .history-list { display: grid; gap: 8px; }
+    .history-item { display: flex; justify-content: space-between; gap: 12px; text-align: left; }
     .status {
       display: grid;
       gap: 10px;
@@ -253,11 +268,16 @@ HTML = r"""<!doctype html>
         <button data-step="preparar">Preparar YOLO</button>
         <button data-step="treinar" class="secondary">Treinar YOLO</button>
       </div>
-      <h2 style="margin-top:18px">Teste do modelo</h2>
-      <input id="modelo" placeholder="runs/ubere/.../weights/best.pt">
-      <input id="imagem" placeholder="dataset/images/test/imagem.jpg">
-      <button id="testar" class="secondary">Testar imagem</button>
-      <p class="meta">O treino e a pre-anotacao podem baixar modelos apenas quando acionados.</p>
+      <h2 style="margin-top:18px">Identificar úbere</h2>
+      <label for="arquivo">Selecione uma foto de vaca</label>
+      <input id="arquivo" type="file" accept="image/jpeg,image/png,image/webp">
+      <details><summary>Opcoes avancadas</summary>
+        <input id="modelo" placeholder="Modelo treinado (automatico)">
+        <input id="imagem" placeholder="Ou caminho de uma imagem no projeto">
+      </details>
+      <button id="testar" class="secondary">Identificar úbere na foto</button>
+      <p id="erro-teste" class="meta danger" role="alert"></p>
+      <p class="meta">Use uma foto em que o úbere esteja visível.</p>
     </aside>
     <section>
       <div class="content-head">
@@ -269,6 +289,18 @@ HTML = r"""<!doctype html>
         <div class="metric"><strong id="m-descartadas">0</strong><span>descartadas</span></div>
         <div class="metric"><strong id="m-labels">0</strong><span>labels finais</span></div>
         <div class="metric"><strong id="m-metadata">0</strong><span>linhas metadata</span></div>
+      </div>
+      <div id="deteccao" class="box" style="display:none;margin-top:16px">
+        <h2>Resultado da deteccao</h2>
+        <p id="deteccao-texto"></p>
+        <img id="deteccao-imagem" alt="Foto analisada com os uberes detectados marcados" style="max-width:100%;max-height:650px;object-fit:contain">
+        <p><a id="ver-original" class="download-link" target="_blank" rel="noopener">Ver foto original salva</a></p>
+        <p><a id="baixar-recorte" class="download-link" style="display:none">Salvar úbere recortado</a></p>
+      </div>
+      <div class="box" style="margin-top:16px">
+        <h2>Imagens salvas</h2>
+        <p class="meta">Clique em uma análise para rever a foto e suas detecções.</p>
+        <div id="historico" class="history-list"></div>
       </div>
       <div class="panel-body">
         <div class="box">
@@ -303,7 +335,20 @@ HTML = r"""<!doctype html>
       const data = await api('/api/status');
       document.getElementById('running').textContent = data.rodando ? 'Rodando' : 'Parado';
       document.getElementById('stage').textContent = 'Etapa atual: ' + data.etapa;
-      document.getElementById('result').textContent = data.erro ? 'Erro: ' + data.erro : 'Resultado: ' + JSON.stringify(data.resultado);
+      document.getElementById('result').textContent = data.erro ? 'Erro: ' + data.erro : 'Resultado: ' + (data.resultado?.mensagem || JSON.stringify(data.resultado));
+      const deteccao = data.resultado?.imagem_resultado;
+      document.getElementById('deteccao').style.display = deteccao ? 'block' : 'none';
+      const baixarRecorte = document.getElementById('baixar-recorte');
+      baixarRecorte.style.display = data.resultado?.arquivo_recorte ? 'inline-block' : 'none';
+      if (data.resultado?.arquivo_recorte) {
+        baixarRecorte.href = '/api/deteccoes/' + encodeURIComponent(data.resultado.arquivo_recorte);
+        baixarRecorte.download = data.resultado.arquivo_recorte;
+      }
+      if (deteccao) {
+        document.getElementById('deteccao-imagem').src = deteccao;
+        document.getElementById('ver-original').href = '/api/deteccoes/' + encodeURIComponent(data.resultado.arquivo_original) + '?inline=1';
+        document.getElementById('deteccao-texto').textContent = data.resultado.mensagem + ' ' + data.resultado.deteccoes.map(d => Math.round(d.confianca * 100) + '% de confianca').join(', ');
+      }
       document.getElementById('result').className = data.erro ? 'meta danger' : 'meta';
       document.getElementById('logs').textContent = data.logs || 'Sem logs ainda.';
       document.getElementById('m-downloads').textContent = data.contadores.downloads;
@@ -317,6 +362,41 @@ HTML = r"""<!doctype html>
       tbody.innerHTML = linhas.map(item => (
         '<tr><td>' + item.nome_arquivo + '</td><td>' + item.termo_pesquisado + '</td><td>' + item.status_processamento + '</td></tr>'
       )).join('');
+      await atualizarHistorico();
+    }
+    async function mostrarAnalise(item) {
+      document.getElementById('deteccao').style.display = 'block';
+      document.getElementById('deteccao-texto').textContent = item.mensagem + ' ' + item.deteccoes.map(d => Math.round(d.confianca * 100) + '% de confianca').join(', ');
+      document.getElementById('deteccao-imagem').src = '/api/deteccoes/' + encodeURIComponent(item.arquivo_resultado) + '?inline=1';
+      const original = document.getElementById('ver-original');
+      original.href = '/api/deteccoes/' + encodeURIComponent(item.arquivo_original) + '?inline=1';
+      const baixarRecorte = document.getElementById('baixar-recorte');
+      baixarRecorte.style.display = item.arquivo_recorte ? 'inline-block' : 'none';
+      if (item.arquivo_recorte) {
+        baixarRecorte.href = '/api/deteccoes/' + encodeURIComponent(item.arquivo_recorte);
+        baixarRecorte.download = item.arquivo_recorte;
+      }
+    }
+    async function atualizarHistorico() {
+      const historico = await api('/api/historico');
+      const lista = document.getElementById('historico');
+      lista.replaceChildren();
+      if (!historico.length) {
+        lista.textContent = 'Nenhuma imagem salva ainda.';
+        return;
+      }
+      historico.forEach(item => {
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'secondary history-item';
+        const data = document.createElement('span');
+        data.textContent = new Date(item.data).toLocaleString();
+        const resumo = document.createElement('span');
+        resumo.textContent = item.mensagem;
+        botao.append(data, resumo);
+        botao.addEventListener('click', () => mostrarAnalise(item));
+        lista.appendChild(botao);
+      });
     }
     document.querySelectorAll('button[data-step]').forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -329,15 +409,30 @@ HTML = r"""<!doctype html>
       });
     });
     document.getElementById('testar').addEventListener('click', async () => {
+      const erro = document.getElementById('erro-teste');
+      erro.textContent = '';
+      try {
+      const arquivo = document.getElementById('arquivo').files[0];
+      if (arquivo && arquivo.size > 15 * 1024 * 1024) throw new Error('Envie uma foto de ate 15 MB.');
+      if (!arquivo && !document.getElementById('imagem').value.trim()) throw new Error('Selecione uma foto primeiro.');
+      setBusy(true);
+      const conteudo = arquivo ? await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = () => reject(new Error('Nao foi possivel ler a foto.'));
+        reader.readAsDataURL(arquivo);
+      }) : '';
       await api('/api/testar', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           modelo: document.getElementById('modelo').value,
-          imagem: document.getElementById('imagem').value
+          imagem: document.getElementById('imagem').value,
+          arquivo_base64: conteudo
         })
       });
-      refresh();
+      await refresh();
+      } catch (e) { erro.textContent = e.message; setBusy(false); }
     });
     document.getElementById('refresh').addEventListener('click', refresh);
     setInterval(refresh, 2500);
@@ -352,9 +447,14 @@ def _ler_json(handler: BaseHTTPRequestHandler) -> dict:
     tamanho = int(handler.headers.get("Content-Length") or 0)
     if tamanho <= 0:
         return {}
+    if tamanho > 21 * 1024 * 1024:
+        raise ValueError('Requisicao excede o limite de 21 MB.')
     bruto = handler.rfile.read(tamanho).decode("utf-8")
     try:
-        return json.loads(bruto)
+        dados = json.loads(bruto)
+        if not isinstance(dados, dict):
+            raise ValueError('Envie um objeto JSON.')
+        return dados
     except json.JSONDecodeError as erro:
         raise ValueError(f"JSON invalido: {erro}") from erro
 
@@ -412,6 +512,25 @@ def _ler_metadata(config: dict, limite: int = 20) -> list[dict[str, str]]:
     return resultado
 
 
+def _ler_historico(limite: int = 50) -> list[dict]:
+    pasta = resolver_caminho("runs/ubere/deteccoes")
+    if not pasta.is_dir():
+        return []
+    registros = []
+    for caminho in pasta.glob("*.json"):
+        try:
+            registro = json.loads(caminho.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as erro:
+            logging.error("Falha ao ler registro de deteccao %s: %s", caminho.name, erro)
+            continue
+        if not isinstance(registro, dict) or not re.fullmatch(r"[0-9a-f]{32}", str(registro.get("id", ""))):
+            logging.error("Registro de deteccao invalido: %s", caminho.name)
+            continue
+        registros.append(registro)
+    registros.sort(key=lambda registro: registro.get('data', ''), reverse=True)
+    return registros[:limite]
+
+
 def _executar_em_thread(nome: str, funcao, config: dict, *args) -> None:
     with ESTADO_LOCK:
         ESTADO.update({"rodando": True, "etapa": nome, "resultado": None, "erro": None})
@@ -419,8 +538,8 @@ def _executar_em_thread(nome: str, funcao, config: dict, *args) -> None:
         logging.info("Front iniciou etapa: %s", nome)
         resultado = funcao(config, *args) if args else funcao(config)
         with ESTADO_LOCK:
-            ESTADO.update({"resultado": str(resultado), "erro": None})
-        logging.info("Front concluiu etapa %s: %s", nome, resultado)
+            ESTADO.update({"resultado": resultado if isinstance(resultado, dict) else str(resultado), "erro": None})
+        logging.info("Front concluiu etapa %s: %s", nome, resultado.get('mensagem', 'concluida') if isinstance(resultado, dict) else resultado)
     except Exception as erro:  # captura central para manter o servidor vivo
         logging.error("Falha na etapa %s: %s", nome, erro)
         logging.debug("Detalhes da falha:\n%s", traceback.format_exc())
@@ -429,6 +548,20 @@ def _executar_em_thread(nome: str, funcao, config: dict, *args) -> None:
     finally:
         with ESTADO_LOCK:
             ESTADO["rodando"] = False
+
+
+def _iniciar_etapa(nome: str, funcao, config: dict, *args) -> bool:
+    with ESTADO_LOCK:
+        if ESTADO['rodando']:
+            return False
+        ESTADO.update(rodando=True, etapa=nome, resultado=None, erro=None)
+    try:
+        threading.Thread(target=_executar_em_thread, args=(nome, funcao, config, *args), daemon=True).start()
+    except Exception:
+        with ESTADO_LOCK:
+            ESTADO['rodando'] = False
+        raise
+    return True
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -462,6 +595,27 @@ class Handler(BaseHTTPRequestHandler):
         if rota == "/api/metadata":
             self._json(_ler_metadata(self.config))
             return
+        if rota == "/api/historico":
+            self._json(_ler_historico())
+            return
+        correspondencia = re.fullmatch(r"/api/deteccoes/([0-9a-f]{32}_(?:original|resultado|recorte)\.jpg)", rota)
+        if correspondencia:
+            caminho = resolver_caminho("runs/ubere/deteccoes") / correspondencia.group(1)
+            try:
+                corpo = caminho.read_bytes()
+            except FileNotFoundError:
+                self._json({"erro": "Imagem salva nao encontrada."}, 404)
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "image/jpeg")
+            modo = parse_qs(urlparse(self.path).query).get('inline') == ['1']
+            disposicao = 'inline' if modo else 'attachment'
+            self.send_header("Content-Disposition", f'{disposicao}; filename="{caminho.name}"')
+            self.send_header("Content-Length", str(len(corpo)))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers()
+            self.wfile.write(corpo)
+            return
         self._json({"erro": "Rota nao encontrada"}, 404)
 
     def do_POST(self) -> None:
@@ -481,22 +635,20 @@ class Handler(BaseHTTPRequestHandler):
                 self._json({"erro": "Etapa invalida."}, 400)
                 return
             nome, funcao = ETAPAS[etapa]
-            thread = threading.Thread(target=_executar_em_thread, args=(nome, funcao, self.config), daemon=True)
-            thread.start()
+            if not _iniciar_etapa(nome, funcao, self.config):
+                self._json({'erro':'Ja existe uma etapa em execucao.'}, 409)
+                return
             self._json({"ok": True, "etapa": nome})
             return
         if rota == "/api/testar":
             modelo = str(dados.get("modelo", "")).strip()
             imagem = str(dados.get("imagem", "")).strip()
-            if not modelo or not imagem:
-                self._json({"erro": "Informe modelo e imagem."}, 400)
+            if not imagem and not dados.get('arquivo_base64'):
+                self._json({"erro": "Selecione uma foto para analisar."}, 400)
                 return
-            thread = threading.Thread(
-                target=_executar_em_thread,
-                args=("Testar modelo", testar_modelo, self.config, modelo, imagem),
-                daemon=True,
-            )
-            thread.start()
+            if not _iniciar_etapa('Identificar ubere', detectar_imagem, self.config, dados):
+                self._json({'erro':'Ja existe uma etapa em execucao.'}, 409)
+                return
             self._json({"ok": True, "etapa": "Testar modelo"})
             return
         self._json({"erro": "Rota nao encontrada"}, 404)

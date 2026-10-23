@@ -1,6 +1,6 @@
-train: dataset/images/train
-val: dataset/images/val
-test: dataset/images/test
+train: "C:/Users/ray67/IdeaProjects/Vscode/ProjetoMastite/dataset/images/train"
+val: "C:/Users/ray67/IdeaProjects/Vscode/ProjetoMastite/dataset/images/val"
+test: "C:/Users/ray67/IdeaProjects/Vscode/ProjetoMastite/dataset/images/test"
 
 names:
   0: ubere

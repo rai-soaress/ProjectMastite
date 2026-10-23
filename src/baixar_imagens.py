@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import time
 from pathlib import Path
 from urllib.parse import quote
@@ -31,6 +32,10 @@ API_COMMONS = "https://commons.wikimedia.org/w/api.php"
 TIPOS_VALIDOS = {"image/jpeg": ".jpg", "image/png": ".png"}
 
 
+class LimiteRequisicoesError(RuntimeError):
+    pass
+
+
 def _requisicao_com_retentativa(session: requests.Session, metodo: str, url: str, config: dict, **kwargs):
     if requests is None:
         raise RuntimeError("requests nao esta instalado. Execute: pip install -r requirements.txt")
@@ -51,6 +56,8 @@ def _requisicao_com_retentativa(session: requests.Session, metodo: str, url: str
         except requests.HTTPError as erro:
             ultima_excecao = erro
             logging.error("Erro HTTP na tentativa %s para %s: %s", tentativa, url, erro)
+            if erro.response is not None and erro.response.status_code == 429:
+                raise LimiteRequisicoesError("Wikimedia limitou os downloads (HTTP 429). Aguarde antes de tentar novamente; as imagens ja baixadas foram preservadas.") from erro
             if erro.response is not None and 400 <= erro.response.status_code < 500:
                 break
         except requests.RequestException as erro:
@@ -64,8 +71,11 @@ def _requisicao_com_retentativa(session: requests.Session, metodo: str, url: str
 
 
 def _licenca_permitida(licenca: str, permitidas: list[str]) -> bool:
-    texto = (licenca or "").lower()
-    return any(item.lower() in texto for item in permitidas)
+    def normalizar(texto: str) -> str:
+        return re.sub(r"[\s-]+", " ", texto.strip().lower())
+
+    texto = normalizar(licenca or "")
+    return any(re.fullmatch(re.escape(normalizar(item)) + r"(?: \d+(?:\.\d+)*)?", texto) for item in permitidas)
 
 
 def _buscar_imagens(session: requests.Session, termo: str, limite: int, config: dict) -> list[dict]:
@@ -77,12 +87,13 @@ def _buscar_imagens(session: requests.Session, termo: str, limite: int, config: 
         "gsrlimit": min(limite, 50),
         "prop": "imageinfo",
         "iiprop": "url|size|mime|extmetadata",
+        "iiurlwidth": 1280,
         "format": "json",
     }
     resposta = _requisicao_com_retentativa(session, "GET", API_COMMONS, config, params=params)
     dados = resposta.json()
     paginas = dados.get("query", {}).get("pages", {})
-    return list(paginas.values())
+    return sorted(paginas.values(), key=lambda pagina: pagina.get("index", 0))
 
 
 def _validar_imagem_temporaria(caminho_tmp: Path, config: dict) -> tuple[str, int, int]:
@@ -126,6 +137,8 @@ def baixar_imagens(config: dict) -> dict[str, int]:
             break
         try:
             paginas = _buscar_imagens(session, termo, max_total - baixadas, config)
+        except LimiteRequisicoesError:
+            raise
         except (RuntimeError, ValueError, requests.RequestException) as erro:
             logging.error("Falha ao pesquisar termo '%s': %s", termo, erro)
             erros += 1
@@ -135,7 +148,7 @@ def baixar_imagens(config: dict) -> dict[str, int]:
             if baixadas >= max_total:
                 break
             info = (pagina.get("imageinfo") or [{}])[0]
-            url = info.get("url", "")
+            url = info.get("thumburl") or info.get("url", "")
             mime = info.get("mime", "")
             metadata = info.get("extmetadata", {})
             licenca = metadata.get("LicenseShortName", {}).get("value", "")
@@ -200,7 +213,9 @@ def baixar_imagens(config: dict) -> dict[str, int]:
                 baixadas += 1
                 logging.info("Imagem baixada e validada: %s", destino.name)
                 time.sleep(float(config["wikimedia"]["intervalo_requisicoes"]))
-            except (requests.Timeout, requests.ConnectionError, requests.HTTPError, requests.RequestException, ValueError, OSError) as erro:
+            except LimiteRequisicoesError:
+                raise
+            except (RuntimeError, requests.RequestException, ValueError, OSError) as erro:
                 erros += 1
                 logging.error("Falha ao baixar/processar %s: %s", url, erro)
             finally:

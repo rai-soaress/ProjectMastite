@@ -26,7 +26,7 @@ MENU = """
 def executar_etapa(nome: str, funcao, *args):
     try:
         resultado = funcao(*args)
-        print(f"\n{name} concluida: {resultado}\n")
+        print(f"\n{nome} concluida: {resultado}\n")
         return resultado
     except (RuntimeError, FileNotFoundError, PermissionError, OSError, ValueError) as erro:
         logging.error("Falha na etapa '%s': %s", nome, erro)

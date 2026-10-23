@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import math
+import json
 import random
 import shutil
 from pathlib import Path
@@ -29,7 +31,7 @@ def _validar_label(caminho_label: Path) -> bool:
             valores = [float(v) for v in partes[1:]]
         except ValueError:
             return False
-        if any(valor < 0 or valor > 1 for valor in valores):
+        if any(not math.isfinite(valor) or valor < 0 or valor > 1 for valor in valores):
             return False
         if valores[2] <= 0 or valores[3] <= 0:
             return False
@@ -94,8 +96,8 @@ def preparar_dataset_yolo(config: dict) -> dict[str, int]:
         except OSError as erro:
             logging.error("Imagem invalida ao preparar YOLO %s: %s", imagem.name, erro)
 
-    if not pares:
-        raise RuntimeError("Nenhuma imagem com anotacao valida foi encontrada para preparar o YOLO.")
+    if len(pares) < 3:
+        raise RuntimeError("Sao necessarias pelo menos 3 imagens com anotacoes validas de ubere para separar treino, validacao e teste. Baixe e anote as imagens primeiro.")
 
     rng = random.Random(int(config["split"]["semente"]))
     rng.shuffle(pares)
@@ -116,9 +118,9 @@ def preparar_dataset_yolo(config: dict) -> dict[str, int]:
         logging.info("Copia para estrutura YOLO finalizada.")
 
     dataset_yaml.write_text(
-        "train: dataset/images/train\n"
-        "val: dataset/images/val\n"
-        "test: dataset/images/test\n\n"
+        f"train: {json.dumps((pasta_images / 'train').as_posix())}\n"
+        f"val: {json.dumps((pasta_images / 'val').as_posix())}\n"
+        f"test: {json.dumps((pasta_images / 'test').as_posix())}\n\n"
         "names:\n"
         "  0: ubere\n",
         encoding="utf-8",
